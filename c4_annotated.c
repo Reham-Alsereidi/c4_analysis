@@ -1,6 +1,8 @@
 // c4.c - C in four functions
-// A minimalist C compiler implementing a subset of C with just enough features
-// to allow self-compilation and basic operations
+
+// char, int, and pointer types
+// if, while, return, and expression statements
+// just enough features to allow self-compilation and a bit more
 
 // Written by Robert Swierczek
 
@@ -64,7 +66,6 @@ enum { Tk, Hash, Name, Class, Type, Val, HClass, HType, HVal, Idsz };
  * 
  * Reads the next token from source code into the global variable tk.
  * Also updates other globals like ival for numeric values.
- * This is the lexer part of the compiler.
  */
 void next()
 {
@@ -73,11 +74,9 @@ void next()
   while (tk = *p) {  // Assign current character to tk and check if not 0
     ++p;  // Move to next character
     
-    // Handle newlines - for error reporting and source listing
-    if (tk == '\n') {
+    if (tk == '\n') {    // Handle newlines - for error reporting and source listing
       if (src) {  // If source listing is enabled
-        // Print source line with line number
-        printf("%d: %.*s", line, p - lp, lp);
+        printf("%d: %.*s", line, p - lp, lp);    // Print source line with line number
         lp = p;
         // Print any VM instructions generated for this line
         while (le < e) {
@@ -191,19 +190,15 @@ void next()
 
 /**
  * expr() - expression parser and code generator
- * 
  * Parses expressions using recursive descent with precedence climbing.
  * Generates VM code for the expressions as it parses.
- * This is the heart of the compiler - both parser and code generator.
- * 
  * @param lev The operator precedence level to start parsing from
  */
 void expr(int lev)
 {
   int t, *d;  // t: temporary type storage, d: symbol pointer or address for jumps
 
-  // Handle unexpected EOF
-  if (!tk) { printf("%d: unexpected eof in expression\n", line); exit(-1); }
+  if (!tk) { printf("%d: unexpected eof in expression\n", line); exit(-1); }    // Handle unexpected EOF
   // Parse numeric literals
   else if (tk == Num) { 
     *++e = IMM; *++e = ival;  // Generate immediate load instruction
@@ -592,9 +587,7 @@ void stmt()
 
 /**
  * main() - compiler driver and VM interpreter
- * 
  * Handles initialization, compilation, and runs the virtual machine.
- * 
  * @param argc Command line argument count
  * @param argv Command line arguments
  * @return Exit status code
