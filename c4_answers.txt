@@ -1,5 +1,3 @@
-
-
 1. What is the purpose of the next() function, and how does it contribute to the compilation process?
 The `next()` function serves as the lexical analyzer (lexer) in C4. Its primary purpose is to:
 1. Read the next token from the input source code
@@ -32,7 +30,7 @@ Symbol resolution happens during parsing, where identifiers are checked against 
 4. Their memory location (for code generation)
 The compiler maintains different symbol classes (`Num`, `Fun`, `Sys`, `Glo`, `Loc`, `Id`) to differentiate between functions, global variables, local variables, etc.
 
- 3. What are the limitations of C4 as a compiler? What features of C does it not support?
+3. What are the limitations of C4 as a compiler? What features of C does it not support?
 C4 is intentionally minimal, supporting only a subset of C. Some key limitations include:
 1. No structs or unions
 2. No type qualifiers (`const`, `volatile`)
@@ -56,21 +54,20 @@ The compiler also has:
 C4 achieves self-hosting by:
 1. Implementing just enough C language features to express its own functionality
 2. Using a minimal subset of C that can express a compiler's key components:
-a. Lexical analysis (`next()`)
-b. Expression parsing (`expr()`)
-c. Statement parsing (`stmt()`)
-d. Code generation (embedded throughout)
-e. Virtual machine execution (in `main()`)
-3. Including a virtual machine to execute the compiled code directly
-The implications of this design are:
-Positive:
-a. Educational value: Demonstrates core compiler concepts in minimal code
-b. Clarity: The entire compiler fits in a single, readable C file
-c. Portability: Can run on any system with a C compiler
-d. Bootstrapping: Can compile itself, demonstrating a complete compilation cycle
-Negative:
-a. Limited functionality: Cannot compile complex C programs
-b. Performance: The interpreted VM is slower than native code
-c. Development: Hard to extend with new language features
-d. Practicality: Not suitable for production use
+  a. Lexical analysis (`next()`)
+  b. Expression parsing (`expr()`)
+  c. Statement parsing (`stmt()`)
+  d. Code generation (embedded throughout)
+  e. Virtual machine execution (in `main()`)
+3. Including a virtual machine to execute the compiled code directly. The implications of this design are:
+Advantages:
+  a. Educational value: Demonstrates core compiler concepts in minimal code
+  b. Clarity: The entire compiler fits in a single, readable C file
+  c. Portability: Can run on any system with a C compiler
+  d. Bootstrapping: Can compile itself, demonstrating a complete compilation cycle
+Disadvantages:
+  a. Limited functionality: Cannot compile complex C programs
+  b. Performance: The interpreted VM is slower than native code
+  c. Development: Hard to extend with new language features
+  d. Practicality: Not suitable for production use
 The elegance of C4 lies in its minimalism - it's a self-contained demonstration of how a language can define itself with just the essential features. This design makes it an excellent learning tool for understanding compiler construction fundamentals while showing how a language can be bootstrapped from minimal elements.
