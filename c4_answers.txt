@@ -1,0 +1,76 @@
+
+
+1. What is the purpose of the next() function, and how does it contribute to the compilation process?
+The `next()` function serves as the lexical analyzer (lexer) in C4. Its primary purpose is to:
+1. Read the next token from the input source code
+2. Update the global token variable `tk` with the token type
+3. Update `ival` with the token value when applicable
+4. Advance the pointer `p` to the position after the current token
+The function handles several types of tokens:
+1. Identifiers and keywords 
+2. Numbers (decimal, hex, octal)
+3. String and character literals
+4. Comments (both single-line and block)
+5. Operators and punctuation
+By recognizing these elements, `next()` converts the raw source code into a stream of tokens that can be consumed by the parser. The parser calls `next()` repeatedly to advance through the code during compilation, making it a foundational element of the compilation process.
+
+2. How does C4 handle symbol resolution (e.g., variables, functions)?
+C4 uses a simple symbol table implementation to track variables and functions:
+1. Symbols are stored in a linear array called `sym`
+2. Each symbol entry takes up multiple positions in the array (defined by the `Idsz` enum)
+3. Symbol attributes include: token type, hash value, name pointer, class, type, and value
+4. The `id` pointer is used to navigate the symbol table
+When the lexer encounters an identifier, it:
+1. Computes a hash of the identifier
+2. Searches the symbol table for a matching entry
+3. If found, sets `tk` to the token type of the entry
+4. If not found, adds a new entry with token type `Id`
+Symbol resolution happens during parsing, where identifiers are checked against the symbol table to determine:
+1. Whether they're already defined
+2. Their scope (global, local, etc.)
+3. Their type (int, char, pointer, etc.)
+4. Their memory location (for code generation)
+The compiler maintains different symbol classes (`Num`, `Fun`, `Sys`, `Glo`, `Loc`, `Id`) to differentiate between functions, global variables, local variables, etc.
+
+ 3. What are the limitations of C4 as a compiler? What features of C does it not support?
+C4 is intentionally minimal, supporting only a subset of C. Some key limitations include:
+1. No structs or unions
+2. No type qualifiers (`const`, `volatile`)
+3. No typedefs
+4. No floating-point types (only `int`, `char`, and pointers)
+5. Limited control structures (only `if`, `while`, no `switch`, `for`, `do-while`, or `goto`)
+6. No preprocessor directives (except basic `#include` handling)
+7. No multi-dimensional arrays (though arrays of pointers are possible)
+8. No compound assignment operators (`+=`, `-=`, etc.)
+9. No standard library beyond a few essential functions
+10. No function prototypes or variable arguments
+11. No bit fields
+12. No complex expressions in initializers
+13. No static variables
+The compiler also has:
+1. Limited error checking and recovery
+2. No optimization passes
+3. Single-pass compilation (no separate compilation)
+
+4. How does C4 achieve self-hosting (i.e., compiling itself)? What are the implications of this design?
+C4 achieves self-hosting by:
+1. Implementing just enough C language features to express its own functionality
+2. Using a minimal subset of C that can express a compiler's key components:
+a. Lexical analysis (`next()`)
+b. Expression parsing (`expr()`)
+c. Statement parsing (`stmt()`)
+d. Code generation (embedded throughout)
+e. Virtual machine execution (in `main()`)
+3. Including a virtual machine to execute the compiled code directly
+The implications of this design are:
+Positive:
+a. Educational value: Demonstrates core compiler concepts in minimal code
+b. Clarity: The entire compiler fits in a single, readable C file
+c. Portability: Can run on any system with a C compiler
+d. Bootstrapping: Can compile itself, demonstrating a complete compilation cycle
+Negative:
+a. Limited functionality: Cannot compile complex C programs
+b. Performance: The interpreted VM is slower than native code
+c. Development: Hard to extend with new language features
+d. Practicality: Not suitable for production use
+The elegance of C4 lies in its minimalism - it's a self-contained demonstration of how a language can define itself with just the essential features. This design makes it an excellent learning tool for understanding compiler construction fundamentals while showing how a language can be bootstrapped from minimal elements.
