@@ -1,0 +1,89 @@
+ C4 Statistics - Analysis Report
+Overview
+The C4 program is a minimalist C compiler written in C, consisting of approximately 400-500 lines of code. It implements
+a complete C compiler that can compile itself, using only four primary functions: `next()`, `expr()`, `stmt()`, and `main()`.
+1.	Lines of Code (LOC)
+a)	Total Program: 423 LOC (excluding blank lines and comments)
+b)	Individual Functions:
+c)	`next()`: 97 LOC
+d)	`expr()`: 142 LOC
+e)	`stmt()`: 55 LOC
+f)	`main()`: 129 LOC
+2.	Cyclomatic Complexity
+a)	`next()`: 48 (high complexity due to many conditionals for token parsing)
+b)	`expr()`: 39 (high complexity handling various expression types and operator precedence)
+c)	`stmt()`: 14 (moderate complexity handling statement types)
+d)	`main()`: 19 (moderate complexity)
+3.	Function Analysis
+a)	Number of Functions: 4
+b)	Average Function Size: 105.75 LOC
+c)	Largest Function: `expr()` (142 LOC)
+d)	Smallest Function: `stmt()` (55 LOC)
+4.	Global Variables
+a)	Number of Global Variables: 11
+b)	`p`, `lp`: Current position in source code
+c)	`data`: Data/BSS pointer
+d)	`e`, `le`: Current position in emitted code
+e)	`id`: Currently parsed identifier
+f)	`sym`: Symbol table
+g)	`tk`: Current token
+h)	`ival`: Current token value
+i)	`ty`: Current expression type
+j)	`loc`: Local variable offset
+k)	`line`: Current line number
+l)	`src`, `debug`: Flags for output/debugging
+5.	Global Variable Usage Patterns:
+a)	Most globals are used across multiple functions
+b)	`p`, `tk`, and `ival` are heavily accessed in `next()`
+c)	`e` is frequently modified in `expr()` and `stmt()`
+d)	`id` and `sym` are central to symbol table management
+
+6.	Token Analysis
+a)	Number of Unique Tokens: 51
+b)	13 keyword tokens (Char, Else, Enum, If, Int, Return, Sizeof, While, etc.)
+c)	29 operator tokens (Assign, Cond, Lor, Lan, Or, Xor, And, etc.)
+d)	9 primary tokens (Num, Fun, Sys, Glo, Loc, Id)
+7.	Most Frequent Tokens:
+a)	`next()` appears ~80 times
+b)	`++e` appears ~70 times 
+c)	`tk` appears ~150 times
+d)	`id` appears ~40 times
+
+8.	Control Flow
+a.	Number of Branches: 
+i.	If-else statements: 37
+ii.	Switch-like constructs: 2 large if-else chains in `next()` and `expr()`
+b.	Number of Loops: 
+i.	While loops: 15
+ii.	No for loops (the compiler only implements while)
+c.	Nesting Levels: 
+i.	Maximum nesting depth: 4 levels (particularly in the `expr()` function)
+ii.	Average nesting depth: 2 levels
+
+9.	Memory Usage Patterns
+a.	Stack Allocation: 
+i.	Function local variables (minimal usage)
+ii.	VM stack implementation in `main()`
+
+b.	Heap Allocation: 
+i.	4 major allocations in `main()`:
+ii.	Symbol table (`sym`) - 256KB
+iii.	Text segment (`e`, `le`) - 256KB
+iv.	Data segment (`data`) - 256KB
+v.	Stack (`sp`) - 256KB
+vi.	Total static allocation: 1MB
+
+c.	Memory Management:
+i.	Manual memory management (malloc/free)
+ii.	No dynamic resizing of allocated regions
+iii.	Simple linear allocation model for data segment
+
+Summary
+C4 is a remarkably compact C compiler that demonstrates minimalist design principles. 
+Despite its small size (~400 LOC), it implements a complete C compiler capable of self-compilation. 
+The code achieves this efficiency through high function complexity, extensive use of global variables, and terse coding style. 
+The entire compiler operates with just four primary functions, with the parsing and code generation logic distributed among them. 
+Memory management is simple but effective, using fixed-size allocations for all major data structures.
+The complexity is concentrated in the `expr()` function, which handles parsing and code generation for expressions using a precedence 
+climbing algorithm. Overall, C4 represents an impressive example of minimalist compiler design that strips C down to its essential components
+while maintaining self-compilation capability.
